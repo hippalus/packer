@@ -7,7 +7,7 @@ public class Packer {
     private Packer() {
     }
 
-    public static String pack(String filePath) throws APIException {
+    public static String pack(final String filePath) throws APIException {
         return null;
     }
 }
