@@ -14,7 +14,7 @@ public final class TextInputValidator implements InputValidator {
     private static final BigDecimal MAX_ITEM_COST = new BigDecimal(100);
     private static final Pattern ITEM_PATTERN = Pattern.compile("\\((\\d+),(\\d+(\\.\\d+)?),€(\\d+)\\)");
 
-    private static Pattern prepareLineRegex(final int maxItems) {
+    private static Pattern prepareLinePattern(final int maxItems) {
         return Pattern.compile("^(\\d+)\\s*:\\s*((\\(\\d+,\\d+(\\.\\d+)?,€\\d+\\)\\s*){1," + maxItems + "})$");
     }
 
@@ -30,7 +30,7 @@ public final class TextInputValidator implements InputValidator {
     private final Pattern linePattern;
 
     TextInputValidator(final int maxItems, final int maxPackageWeight, final BigDecimal maxItemWeight, final BigDecimal maxItemCost) {
-        this(maxItems, maxPackageWeight, maxItemWeight, maxItemCost, ITEM_PATTERN, prepareLineRegex(maxItems));
+        this(maxItems, maxPackageWeight, maxItemWeight, maxItemCost, ITEM_PATTERN, prepareLinePattern(maxItems));
     }
 
     @SuppressWarnings("ConstructorWithTooManyParameters")

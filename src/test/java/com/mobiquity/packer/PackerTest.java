@@ -18,6 +18,8 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -125,9 +127,14 @@ class PackerTest {
     }
 
     public static Stream<Arguments> validInputAndExpectedOutputTestCaseInputProvider() {
-
         return Stream.of(
-                Arguments.of(getResourcePath("example_input"), loadResource("example_output"))
+                Arguments.of(getResourcePath("example_input"), loadResource("example_output")),
+                Arguments.of(getResourcePath("input1"), loadResource("output1")),
+                Arguments.of(getResourcePath("input2"), loadResource("output2")),
+                Arguments.of(getResourcePath("input3"), loadResource("output3")),
+                Arguments.of(getResourcePath("input4"), loadResource("output4")),
+                Arguments.of(getResourcePath("input5"), loadResource("output5")),
+                Arguments.of(getResourcePath("input6"), loadResource("output6"))
         );
     }
 
@@ -138,12 +145,10 @@ class PackerTest {
     private static String loadResource(final String resource) {
         try (final InputStream is = PackerTest.class.getClassLoader().getResourceAsStream(resource);
              final BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
-            }
-            return stringBuilder.toString();
+
+            return reader.lines()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining("\n"));
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }

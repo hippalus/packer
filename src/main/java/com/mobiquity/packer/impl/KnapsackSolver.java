@@ -21,13 +21,13 @@ public final class KnapsackSolver implements PackageSolver {
 
     @Override
     public OptimizedPackage solve(final InboundPackage inboundPackage) {
-
-        final List<Item> items = inboundPackage.items();
-        final int n = items.size();
         final int weightLimit = inboundPackage.weightLimit();
-        final BigDecimal[][] dp = new BigDecimal[n + 1][weightLimit + 1];
+        final List<Item> items = inboundPackage.filteredItems();
+        final int itemSize = items.size();
 
-        for (int i = 0; i <= n; i++) {
+        final BigDecimal[][] dp = new BigDecimal[itemSize + 1][weightLimit + 1];
+
+        for (int i = 0; i <= itemSize; i++) {
             for (int w = 0; w <= weightLimit; w++) {
                 if (i == 0 || w == 0) {
                     dp[i][w] = BigDecimal.ZERO;
@@ -41,21 +41,22 @@ public final class KnapsackSolver implements PackageSolver {
             }
         }
 
+
         final List<Item> selectedItems = new ArrayList<>();
-        int i = n;
+        int i = itemSize;
         int w = weightLimit;
         while (i > 0 && w > 0) {
-            if (dp[i][w].compareTo(dp[i - 1][w]) != 0) {
+            if ((dp[i][w].compareTo(dp[i - 1][w]) != 0) || (dp[i][w].compareTo(dp[i - 1][w]) == 0 && (i >= 2 && items.get(i - 1).cost().compareTo(items.get(i - 2).cost()) == 0 && items.get(i - 1).weight().compareTo(items.get(i - 2).weight()) <= 0))) {
                 selectedItems.add(items.get(i - 1));
                 w -= items.get(i - 1).weight().intValue();
             }
+
             i--;
         }
 
-        // Sort selected items by weight in ascending order
         selectedItems.sort(Comparator.comparing(Item::index));
 
-        return new OptimizedPackage(inboundPackage.weightLimit(), selectedItems);
+        return new OptimizedPackage(weightLimit, selectedItems);
 
     }
 }
