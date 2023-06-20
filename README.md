@@ -21,7 +21,7 @@ The codebase for the Package Challenge consists of the following components:
 - `InputParser`: An interface for parsing the input file and converting it into domain objects.
 - `InputValidator`: An interface for validating the input data and ensuring it meets the constraints.
 - `KnapsackSolver`: An implementation of the `PackageSolver` interface using
-  the [Knapsack algorithm](https://en.wikipediaorg/wiki/Knapsack_problem)
+  the [Knapsack algorithm](https://en.wikipedia.org/wiki/Knapsack_problem)
 - `TextInputParser`: An implementation of the `InputParser` interface for parsing the input file.
 - `TextInputValidator`: An implementation of the `InputValidator` interface for validating the input data.
 - `APIException`: A custom exception class for handling API-related exceptions.
