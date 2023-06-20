@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TextInputValidator implements InputValidator {
+
     private static final int MAX_ITEMS = 15;
     private static final int MAX_PACKAGE_WEIGHT = 100;
     private static final BigDecimal MAX_ITEM_WEIGHT = new BigDecimal(100);
@@ -29,23 +30,30 @@ public final class TextInputValidator implements InputValidator {
     private final Pattern itemPattern;
     private final Pattern linePattern;
 
-    TextInputValidator(final int maxItems, final int maxPackageWeight, final BigDecimal maxItemWeight, final BigDecimal maxItemCost) {
-        this(maxItems, maxPackageWeight, maxItemWeight, maxItemCost, ITEM_PATTERN, prepareLinePattern(maxItems));
-    }
-
     @SuppressWarnings("ConstructorWithTooManyParameters")
-    TextInputValidator(final int maxItems,
-                       final int maxPackageWeight,
-                       final BigDecimal maxItemWeight,
-                       final BigDecimal maxItemCost,
-                       final Pattern itemPattern,
-                       final Pattern linePattern) {
+    TextInputValidator(
+            final int maxItems,
+            final int maxPackageWeight,
+            final BigDecimal maxItemWeight,
+            final BigDecimal maxItemCost,
+            final Pattern itemPattern,
+            final Pattern linePattern
+    ) {
         this.maxItems = maxItems;
         this.maxPackageWeight = maxPackageWeight;
         this.maxItemWeight = maxItemWeight;
         this.maxItemCost = maxItemCost;
         this.itemPattern = itemPattern;
         this.linePattern = linePattern;
+    }
+
+    TextInputValidator(
+            final int maxItems,
+            final int maxPackageWeight,
+            final BigDecimal maxItemWeight,
+            final BigDecimal maxItemCost
+    ) {
+        this(maxItems, maxPackageWeight, maxItemWeight, maxItemCost, ITEM_PATTERN, prepareLinePattern(maxItems));
     }
 
 

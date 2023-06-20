@@ -7,8 +7,8 @@ import com.mobiquity.packer.model.OptimizedPackage;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 public final class KnapsackSolver implements PackageSolver {
 
@@ -16,7 +16,7 @@ public final class KnapsackSolver implements PackageSolver {
         return new KnapsackSolver();
     }
 
-    KnapsackSolver() {
+    private KnapsackSolver() {
     }
 
     @Override
@@ -56,7 +56,7 @@ public final class KnapsackSolver implements PackageSolver {
     }
 
     private List<Item> findSelectedItems(final List<Item> items, final BigDecimal[][] dp) {
-        final List<Item> selectedItems = new ArrayList<>();
+        final TreeSet<Item> selectedItems = new TreeSet<>();
         int i = items.size();
         int w = dp[0].length - 1;
 
@@ -72,9 +72,7 @@ public final class KnapsackSolver implements PackageSolver {
             i--;
         }
 
-        Collections.sort(selectedItems);
-
-        return selectedItems;
+        return new ArrayList<>(selectedItems);
     }
 
     private boolean isLeastWeightAmongTheSameCostsItems(final List<Item> items, final int currentIndex) {
