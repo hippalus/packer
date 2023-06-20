@@ -46,9 +46,3 @@ The following constraints should be considered while developing the solution:
 1. The maximum weight that a package can take is ≤ 100.
 2. There might be up to 15 items to choose from.
 3. The maximum weight and cost of an item are ≤ 100.
-
-## Additional Notes
-
-- Best practices for software design and development have been followed throughout the implementation.
-- The codebase is designed to be used as a cross-platform library, not as a standalone application.
-- The test cases cover different scenarios and ensure the correctness of the implementation.
