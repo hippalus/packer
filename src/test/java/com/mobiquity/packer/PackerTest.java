@@ -38,10 +38,25 @@ class PackerTest {
 
     @ParameterizedTest
     @MethodSource("validInputAndExpectedOutputTestCaseInputProvider")
-    void pack_ValidInput_ReturnsExpectedOutput(final String filPath, final String expectedOutput) throws APIException, IOException {
+    void pack_ValidInput_ReturnsExpectedOutput(final String filPath, final String expectedOutput) throws APIException {
         final String output = Packer.pack(filPath);
 
         assertEquals(expectedOutput, output);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidInputThenThrowAPIExceptionTestCaseInputProvider")
+    void pack_InvalidInput_ThrowsAPIException(final String filPath, final APIException exception) {
+
+        final APIException actual = assertThrowsExactly(exception.getClass(), () -> Packer.pack(filPath));
+
+
+        assertEquals(exception.getMessage(), actual.getMessage());
+
+        if (exception.getCause() != null) {
+            assertEquals(exception.getCause().getClass(), actual.getCause().getClass());
+            assertEquals(exception.getCause().getMessage(), actual.getCause().getMessage());
+        }
     }
 
 
@@ -119,7 +134,7 @@ class PackerTest {
                 Arguments.of(
                         "56 : (1,10.72,€13) (2,33.80,€40) (3,43.15,€10) (4,37.97,€16) (5,46.81,€36) (6,48.77,€79) (7,81.80,€45)" +
                                 " (8,19.36,€79) (9,6.76,€64) (10,10.72,€13) (11,33.80,€40) (12,15.15,€10) (13,37.97,€16) (14,46.81,€36) (15,48.77,€79) (16,81.80,€45) (17,19.36,€79) (18,6.76,€64)",
-                        "Invalid line format or too many items. Maximum allowed is 15 . 56 : (1,10.72,€13) (2,33.80,€40) (3,43.15,€10) (4,37.97,€16) " +
+                        "Invalid line format or too many items. Maximum allowed is 15.Invalid Line: 56 : (1,10.72,€13) (2,33.80,€40) (3,43.15,€10) (4,37.97,€16) " +
                                 "(5,46.81,€36) (6,48.77,€79) (7,81.80,€45) (8,19.36,€79) (9,6.76,€64) (10,10.72,€13) (11,33.80,€40) (12,15.15,€10) (13,37.97,€16) " +
                                 "(14,46.81,€36) (15,48.77,€79) (16,81.80,€45) (17,19.36,€79) (18,6.76,€64)"
                 )
@@ -138,8 +153,25 @@ class PackerTest {
         );
     }
 
+    public static Stream<Arguments> invalidInputThenThrowAPIExceptionTestCaseInputProvider() {
+        final String invalidInput1 = getResourcePath("invalid_input1");
+        final String invalidInput2 = getResourcePath("invalid_input2");
+        final String invalidInput3 = getResourcePath("invalid_input3");
+        final String invalidInput4 = getResourcePath("invalid_input4");
+        return Stream.of(
+                Arguments.of(invalidInput1, new APIException("Exception has been occurred while processing " +
+                        "the file" + invalidInput1, new PackerValidationException("Invalid weight for package: 120"))),
+                Arguments.of(invalidInput2, new APIException("Exception has been occurred while processing " +
+                        "the file" + invalidInput2, new PackerValidationException("Invalid weight for item 1: 150.72"))),
+                Arguments.of(invalidInput3, new APIException("Exception has been occurred while processing " +
+                        "the file" + invalidInput3, new PackerValidationException("Invalid cost for item 1: 130"))),
+                Arguments.of(invalidInput4, new APIException("Exception has been occurred while processing " +
+                        "the file" + invalidInput4, new PackerValidationException("Invalid line format or too many items. Maximum allowed is 15.Invalid Line: 56 : (1,10.72,€13) (2,33.80,€40) (3,43.15,€10) (4,37.97,€16) (5,46.81,€36) (6,48.77,€79) (7,81.80,€45) (8,19.36,€79) (9,6.76,€64) (10,10.72,€13) (11,33.80,€40) (12,15.15,€10) (13,37.97,€16) (14,46.81,€36) (15,48.77,€79) (16,81.80,€45) (17,19.36,€79) (18,6.76,€64)")))
+        );
+    }
+
     private static String getResourcePath(final String resource) {
-        return PackerTest.class.getClassLoader().getResource(resource).getPath();
+        return Objects.requireNonNull(PackerTest.class.getClassLoader().getResource(resource)).getPath();
     }
 
     private static String loadResource(final String resource) {

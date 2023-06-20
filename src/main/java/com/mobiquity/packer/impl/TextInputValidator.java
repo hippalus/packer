@@ -53,7 +53,8 @@ public final class TextInputValidator implements InputValidator {
     public Matcher createPackageLineMatcher(final String line) {
         final Matcher lineMatcher = this.linePattern.matcher(line);
         if (!lineMatcher.matches()) {
-            throw new PackerValidationException("Invalid line format or too many items. Maximum allowed is " + this.maxItems + " . " + line);
+            throw new PackerValidationException("Invalid line format or too many items. Maximum allowed is " + this.maxItems +
+                    ".Invalid Line: " + line);
         }
         return lineMatcher;
     }
